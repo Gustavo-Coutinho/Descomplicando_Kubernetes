@@ -1,0 +1,17 @@
+## O Jefferson faz com NFS, não consegui adaptar para local e estou dando andamento ao curso.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: garcom-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: frigideira
+  volumeMode: Filesystem
+  volumeName: despensa-pv
+  selector: 
+    matchLabels:
+      storage: local

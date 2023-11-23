@@ -1,0 +1,20 @@
+## O Jefferson faz com NFS, não consegui adaptar para local e estou dando andamento ao curso.
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    storage: local
+  name: nginx-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: garcom-pvc
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: garcom-pvc
+    persistentVolumeClaim:
+      claimName: garcom-pvc

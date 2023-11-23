@@ -1,0 +1,81 @@
+estou tentando criar um pod no Kubernetes com o seguinte arquivo yaml:
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    storage: local
+  name: nginx-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: garcom-pvc
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: garcom-pvc
+    persistentVolumeClaim:
+      claimName: garcom-pvc
+
+esse é meu PersistentVolumeClaim garcom-pvc:
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: garcom-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: frigideira
+  volumeMode: Filesystem
+  volumeName: despensa-pv
+  selector: 
+    matchLabels:
+      storage: local
+
+esse é meu PersistentVolume despensa-pv:
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: despensa-pv
+  labels:
+    storage: local
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /run/desktop/mnt/host/c/Users/gustavo.coutinho/'OneDrive - csdbr.com'/Documentos/Estudos/Kubernetes/Descomplicando_Kubernetes/day-6
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: storage
+          operator: In
+          values:
+          - local
+
+
+essa é minha StorageClass frigideira:
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: frigideira
+provisioner: kubernetes.io/no-provisioner
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  archiveOnDelete: "false"
+
+ao executar o comando "kubectl apply -f ." o pod 'nginx-pod' é criado, mas fica com status Pending. Ao rodar o comando 'kubectl describe pod nginx-pod' consigo ver a seguinte mensagem:
+
+0/3 nodes are available: pod has unbound immediate PersistentVolumeClaims. preemption: 0/3 nodes are available: 3 No preemption victims found for incoming pod..
+
+proponha uma solução eficaz que solucione o erro

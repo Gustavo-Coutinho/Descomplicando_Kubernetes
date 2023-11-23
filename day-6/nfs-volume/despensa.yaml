@@ -1,0 +1,24 @@
+## O Jefferson faz com NFS, não consegui adaptar para local e estou dando andamento ao curso.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: despensa-pv
+  labels:
+    storage: local
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /run/desktop/mnt/host/c/Users/gustavo.coutinho/'OneDrive - csdbr.com'/Documentos/Estudos/Kubernetes/Descomplicando_Kubernetes/day-6
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: storage
+          operator: In
+          values:
+          - local
