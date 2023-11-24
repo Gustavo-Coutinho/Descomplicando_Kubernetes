@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-node
+spec:
+  containers:
+  - name: webserver-container
+    image: gupoco/app-node:1.1
+  imagePullSecrets:
+    - name: dockerhub-gpc

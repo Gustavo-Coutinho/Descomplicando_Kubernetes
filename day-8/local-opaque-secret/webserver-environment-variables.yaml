@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webserver
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: webserver
+    image: nginx:1.20
+    env: 
+    - name: USUARIO
+      valueFrom:
+        secretKeyRef:
+          name: gpc-secret
+          key: username
+    - name: SENHA
+      valueFrom:
+        secretKeyRef:
+          name: gpc-secret
+          key: password
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
