@@ -1,0 +1,16 @@
+# tentei criar um load balancer localmente, mas não é possível sem um Ingress. Na AWS esse ingress é criado automaticamente, pelo que parece.
+apiVersion: v1
+kind: Service
+metadata:
+  name: local-lb
+  labels:
+    app: local-lb
+spec:
+  type: LoadBalancer
+  selector:
+    app: local-lb
+  ports:
+    - port: 8080
+      name: http
+      targetPort: 80
+      nodePort: 30036
