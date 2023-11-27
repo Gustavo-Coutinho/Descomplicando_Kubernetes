@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cofre-senhas
+  name: cofre-senhas
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cofre-senhas
+  template:
+    metadata:
+      labels:
+        app: cofre-senhas
+    spec:
+      containers:
+      - image: linuxtips/giropops-senhas:1.0
+        name: cofre-senhas
+        env:
+        - name: REDIS_HOST
+          value: redis-service
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Always

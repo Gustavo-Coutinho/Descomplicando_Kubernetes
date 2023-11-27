@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cofre-senhas
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: localhost # SE FOR AWS: domínio CNAME
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cofre-senhas
+            port:
+              number: 5000
+
+# na aula, o LinuxTips pede para alterar o /etc/hosts para criar um alias '127.0.0.1  gupoco.nginx.io'
+# nesse computador, não tenho permissão para alterar o arquivo 'C:\Windows\System32\drivers\etc\hosts'

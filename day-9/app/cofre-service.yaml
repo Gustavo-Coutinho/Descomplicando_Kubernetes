@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cofre-senhas
+  labels:
+    app: cofre-senhas
+spec:
+  selector:
+    app: cofre-senhas
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      name: tcp-app
+  type: ClusterIP
