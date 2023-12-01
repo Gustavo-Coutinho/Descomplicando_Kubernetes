@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cofre-senhas
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Declaração para utilizar cookies
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "meu-cookie"
+    #cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+spec:
+  ingressClassName: nginx
+  #tls:
+  #### Domínio para ter a finalização da criptografia
+  #- hosts:
+  #  - cofre-senhas.io # SSL somente vai ser assinado se tiver domínio CNAME
+  #  secretName: gupoco-senhas-tls
+  rules:
+  - host: localhost # SE FOR AWS: domínio CNAME
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cofre-senhas
+            port:
+              number: 5000
+

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cofre-senhas-rps-limitadas
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # Declaração para utilizar limite de Requisições por segundo (RPS)
+    nginx.ingress.kubernetes.io/limit-rps: "1"
+    
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: localhost # SE FOR AWS: domínio CNAME
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: cofre-senhas
+            port:
+              number: 5000
